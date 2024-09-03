@@ -9,9 +9,11 @@ export default function Articles({ articles, getArticles, deleteArticle, setCurr
     return <Navigate to="/" />;
   }
 
-  
+ 
   useEffect(() => {
-    getArticles();
+    if (!articles.length) {
+      getArticles();
+    }
   }, []);
 
   return (
@@ -22,10 +24,10 @@ export default function Articles({ articles, getArticles, deleteArticle, setCurr
           ? 'No articles yet'
           : articles.map(art => {
             
-            const isEditing = art.article_id === currentArticleId;
+           
             return (
               <div 
-                className={`article ${isEditing ? 'editing' : ''}`} 
+                className={'article'} 
                 key={art.article_id}
               >
                 <div>
@@ -35,7 +37,7 @@ export default function Articles({ articles, getArticles, deleteArticle, setCurr
                 </div>
                 <div>
                   <button onClick={() => setCurrentArticleId(art.article_id)}>
-                    {isEditing ? 'Editing' : 'Edit'}
+                    Edit
                   </button>
                   <button onClick={() => deleteArticle(art.article_id)}>
                     Delete
