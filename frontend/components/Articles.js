@@ -11,9 +11,7 @@ export default function Articles({ articles, getArticles, deleteArticle, setCurr
 
  
   useEffect(() => {
-    if (!articles.length) {
-      getArticles();
-    }
+    getArticles()
   }, []);
 
   return (
@@ -27,13 +25,14 @@ export default function Articles({ articles, getArticles, deleteArticle, setCurr
            
             return (
               <div 
-                className={'article'} 
+                className='articles' 
                 key={art.article_id}
               >
                 <div>
                   <h3>{art.title}</h3>
                   <p>{art.text}</p>
                   <p>Topic: {art.topic}</p>
+                  {currentArticleId === art.article_id && <div>Currently Editing</div>}
                 </div>
                 <div>
                   <button onClick={() => setCurrentArticleId(art.article_id)}>

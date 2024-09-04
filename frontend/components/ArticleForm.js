@@ -3,20 +3,21 @@ import PT from 'prop-types';
 
 const initialFormValues = { title: '', text: '', topic: '' };
 
-export default function ArticleForm({ postArticle, updateArticle, setCurrentArticleId, articles, currentArticleId }) {
+export default function ArticleForm(props) {
   const [values, setValues] = useState(initialFormValues);
+  const { postArticle, updateArticle, setCurrentArticleId, currentArticle } = props
 
   useEffect(() => {
-    if (currentArticleId && articles.length > 0) {
-      const current = articles.find(article => article.article_id === currentArticleId);
-      if (current) {
-        setValues(current);
-      }
-      
+    if (currentArticle) {
+      setValues({
+        title: currentArticle.title,
+        text: currentArticle.text,
+        topic: currentArticle.topic
+    })     
     } else {
       setValues(initialFormValues);
     }
-  }, [currentArticleId, articles]);
+  }, [currentArticle]);
   
 
   const handleChange = (e) => {
@@ -26,44 +27,26 @@ export default function ArticleForm({ postArticle, updateArticle, setCurrentArti
 
   const onSubmit = (evt) => {
     evt.preventDefault();
-    console.log(evt);
-    if (currentArticleId) {
-      let articleData = {
-        article_id: currentArticleId,
-        article: values,
-      };
-      updateArticle(articleData)
-        .then(() => {
-          setValues(initialFormValues);
-        })
-        .catch((error) => {
-          console.error("Error updating article:", error);
-        });
-    } else {
-      postArticle(values)
-        .then(() => {
-          console.log("Article posted successfully");
-          setValues(initialFormValues);
-        })
-        .catch((error) => {
-          console.error("Error posting article:", error);
-        });
+    const art = {
+    title : values.title,
+    text : values.text,
+    topic : values.topic,
     }
-  };
-  
+    currentArticle
+    ? updateArticle({art, article_id: currentArticle.article_id})
+    : postArticle(art)
+    setCurrentArticleId()
+    setValues(initialFormValues)
+  }
 
   const isDisabled = () => {
     return Object.values(values).some(value => !value.trim());
   };
 
-  const reset = () => {
-    setValues(initialFormValues);
-    setCurrentArticleId(null);
-  };
-
+  
   return (
     <form id="form" onSubmit={onSubmit}>
-      <h2>Create Article</h2>
+      <h2>{currentArticle ? 'Edit' : 'Create'} Article</h2>
       <input
         maxLength={50}
         onChange={handleChange}
@@ -87,7 +70,7 @@ export default function ArticleForm({ postArticle, updateArticle, setCurrentArti
       <div className="button-group">
         <button type="submit" disabled={isDisabled()} id="submitArticle">Submit</button>
         
-          <button type="button" onClick={(e) => reset(e)}>Cancel Edit</button>
+          {currentArticle && <button type="button" onClick={() => setCurrentArticleId()}>Cancel Edit</button>}
         
       </div>
     </form>
