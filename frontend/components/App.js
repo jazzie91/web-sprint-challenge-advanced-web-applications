@@ -4,7 +4,7 @@ import Articles from "./Articles";
 import LoginForm from "./LoginForm";
 import Message from "./Message";
 import ArticleForm from "./ArticleForm";
-import Spinner from "./Spinner";
+import Spinner from "./Spinner";  // Import Spinner component
 import axios from "axios";
 
 const articlesUrl = "http://localhost:9000/api/articles";
@@ -92,14 +92,14 @@ export default function App() {
 
     axios
       .put(`${articlesUrl}/${article_id}`, article, {
-        headers: { Authorization: localStorage.getItem("token") }
+        headers: { Authorization: localStorage.getItem("token") },
       })
       .then((res) => {
         setMessage(res.data.message);
-        setArticles(arts => {
-          return arts.map(art => {
-            return art.article_id === article_id ? res.data.article : art
-          })
+        setArticles((arts) => {
+          return arts.map((art) => {
+            return art.article_id === article_id ? res.data.article : art;
+          });
         });
       })
       .catch((err) => {
@@ -142,6 +142,7 @@ export default function App() {
 
   return (
     <>
+      
       <Spinner on={spinnerOn} />
       <Message message={message} />
       <button id="logout" onClick={logout}>

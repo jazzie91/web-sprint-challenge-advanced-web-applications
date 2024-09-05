@@ -7,21 +7,26 @@ test('sanity', () => {
   expect(true).toBe(true)
 })
 
-test('Spinner renders correctly when spinnerOn is true', () => {
-  render(<Spinner spinnerOn={true} />)
+Spinner.defaultProps = {
+  on: false, 
+};
+
+test('Spinner renders correctly when on is true', () => {
+  render(<Spinner on={true} />)
   const spinner = screen.getByTestId('spinner')
   expect(spinner).toBeInTheDocument()
   expect(spinner).toHaveTextContent('Please wait...')
 })
 
-test('Spinner does not render when spinnerOn is false', () => {
-  render(<Spinner spinnerOn={false} />)
+test('Spinner does not render when on prop is false', () => {
+  render(<Spinner on={false} />)  
   const spinner = screen.queryByTestId('spinner')
-  expect(spinner).toBeNull() 
+  expect(spinner).toBeNull()
 })
 
-test('Spinner does not render when spinnerOn prop is not provided', () => {
+test('Spinner does not render when on prop is not provided', () => {
   render(<Spinner />)
   const spinner = screen.queryByTestId('spinner')
   expect(spinner).toBeNull()
 })
+
